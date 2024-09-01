@@ -11,3 +11,5 @@ The model located in the `/intention-classify` directory is designed to categori
 We employ a Convolutional Neural Network (CNN) architecture combined with an Energy-based Model for open-set recognition.
 
 This model is optimized to be lightweight, ensuring it can run on a wide range of devices, including within the browser environment.
+
+A detailed explain of how it works could be found in [this blog post](https://blog.alikia2x.com/en/posts/sparkastml-intention/).
