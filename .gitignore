@@ -5,3 +5,5 @@ runs
 *.bin
 token_to_id.json
 .ipynb_checkpoints
+translate/**/data
+__pycache__
