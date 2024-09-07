@@ -6,15 +6,15 @@ from transformers import AdamW, get_scheduler
 from sacrebleu.metrics import BLEU
 from tqdm.auto import tqdm
 from torch.utils.tensorboard import SummaryWriter
-from dataloader.wikititle import Wikititle
+from dataloader.multiTrans19 import MultiTRANS19
 
 writer = SummaryWriter()
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using {device} device")
 
-train_set_size = 95000
-valid_set_size = 5000
+train_set_size = 80000
+valid_set_size = 2000
 test_data_size = 0
 
 last_1k_loss = []
@@ -32,10 +32,12 @@ epoch_num = 1
 
 # 检查点文件路径，默认为None
 # checkpoint_path = None
-checkpoint_path = "./saves/checkpoint_74000.bin"  # 如果要从检查点继续训练，设置此路径
+checkpoint_path = "./saves/checkpoint_76500.bin"  # 如果要从检查点继续训练，设置此路径
 
 
-data = Wikititle("./data/wikititles-v3.zh-en.tsv")
+#data = Wikititle("./data/wikititles-v3.zh-en.tsv")
+data = MultiTRANS19("./data/translation2019zh/translation2019zh_train.json")
+print(len(data))
 train_data, valid_data, test_data = random_split(data, [train_set_size, valid_set_size, test_data_size])
 
 # data = TRANS("./data/translation2019zh/translation2019zh_train.json")
@@ -135,7 +137,7 @@ def train_loop(dataloader, model, optimizer, lr_scheduler, epoch, total_loss, st
                 "kmean_loss": kmean_loss,
                 "step": step,
             }
-            torch.save(checkpoint, f"checkpoint_{step}.bin")
+            torch.save(checkpoint, f"./saves/checkpoint_{step}.bin")
     return total_loss, step
 
 
@@ -195,6 +197,6 @@ for t in range(epoch_num):
         "kmean_loss": kmean_loss,
         "step": step,
     }
-    torch.save(checkpoint, f"step_{step}_valid_bleu_{valid_bleu:0.2f}_model_weights.bin")
+    torch.save(checkpoint, f"./saves/step_{step}_bleu_{valid_bleu:0.2f}.bin")
 
 print("Done!")
