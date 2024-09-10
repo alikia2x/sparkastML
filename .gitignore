@@ -11,3 +11,4 @@ __pycache__
 .env*
 translate/output
 translate/source
+*.db
