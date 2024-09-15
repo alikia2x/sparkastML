@@ -1,5 +1,6 @@
 import os
 import json
+from pybloom_live import BloomFilter
 
 def read_converted_files(filename):
     """读取converted.txt文件，返回一个包含已处理文件名的集合"""
@@ -16,6 +17,8 @@ def write_converted_file(filename, file_name):
 def process_json_files(directory, converted_filename):
     """处理指定目录下的所有json文件"""
     converted_files = read_converted_files(converted_filename)
+    bloom_filter_chinese = BloomFilter(capacity=1000000, error_rate=0.001)  # 初始化Bloom Filter
+    bloom_filter_english = BloomFilter(capacity=1000000, error_rate=0.001)  # 初始化Bloom Filter
 
     for filename in os.listdir(directory):
         if filename.endswith('.json') and filename not in converted_files:
@@ -30,8 +33,13 @@ def process_json_files(directory, converted_filename):
                         chinese_text = segment.get('chinese', '').replace('\n', ' ')
                         english_text = segment.get('english', '').replace('\n', ' ')
 
-                        source_file.write(chinese_text + '\n')
-                        target_file.write(english_text + '\n')
+                        if chinese_text not in bloom_filter_chinese:
+                            bloom_filter_chinese.add(chinese_text)
+                            source_file.write(chinese_text + '\n')
+
+                        if english_text not in bloom_filter_english:
+                            bloom_filter_english.add(english_text)
+                            target_file.write(english_text + '\n')
 
             write_converted_file(converted_filename, filename)
 

@@ -3,11 +3,14 @@ import trafilatura
 import hashlib
 import re
 import os
+from dotenv import load_dotenv
 from trafilatura.readability_lxml import is_probably_readerable
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
+load_dotenv()
+
 # 常量定义
-MAX_FETCH_LIMIT = 300  # 每次运行时获取的最大任务数量
+MAX_FETCH_LIMIT = int(os.getenv("FETCH_LIMIT"))  # 每次运行时获取的最大任务数量
 
 # 数据库连接
 def connect_db(db_path):
@@ -112,7 +115,7 @@ def main():
     unfetched_urls = get_unfetched_urls(conn, MAX_FETCH_LIMIT)
     conn.close()
     
-    with ThreadPoolExecutor(max_workers=10) as executor:
+    with ThreadPoolExecutor(max_workers=int(os.getenv("FETCH_THREADS"))) as executor:
         futures = [executor.submit(process_url, url, db_path, save_path) for url in unfetched_urls]
         
         for future in as_completed(futures):
