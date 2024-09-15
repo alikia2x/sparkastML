@@ -1,9 +1,10 @@
+import os
 import requests
 from bs4 import BeautifulSoup
 import sqlite3
 import urllib.robotparser as urobot
 from urllib.parse import urljoin, urlparse
-
+from dotenv import load_dotenv
 
 MAX_RECURSION_DEPTH = 5
 MAX_URLS = 1000
@@ -124,11 +125,15 @@ def main(seed_url, rp, sitemap=None):
             save_url(sitemap_url)
     crawl(seed_url, rp=rp)
 
+def get_config(key):
+    return os.getenv(key)
+
 # Example usage
-# if __name__ == "__main__":
-#     seed_url = "https://www.bbc.co.uk/news"
-#     rp = urobot.RobotFileParser()
-#     rp.set_url("https://www.bbc.co.uk/robots.txt")
-#     rp.read()
-#     main(seed_url, rp, "https://www.bbc.co.uk/sitemap.xml")
-#     conn.close()
+if __name__ == "__main__":
+    load_dotenv()
+    seed_url = get_config("SEED_URL")
+    rp = urobot.RobotFileParser()
+    rp.set_url(get_config("ROBOTS_URL"))
+    rp.read()
+    main(seed_url, rp, get_config("SITEMAP_URL"))
+    conn.close()
