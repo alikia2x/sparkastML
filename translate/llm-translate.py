@@ -20,6 +20,7 @@ IMPORTANT:
 2. For segments or sentences that appear multiple times in the original text, they are only output **once** in the returned translation.
 3. **For content with obvious semantic differences, such as different components on a web page, no matter how short it is, it should be divided into a separate segment.**
 4. **Information such as web page headers, footers, and other fixed text, such as copyright notices, website or company names, and conventional link text (such as "About Us", "Privacy Policy", etc.) will be **ignored and not translated**
+5. If the provided text lacks proper punctuation, please add proper punctuation to both the source text and the translated text in the output.
 
 EXAMPLE INPUT: 
 法律之前人人平等，并有权享受法律的平等保护，不受任何歧视。人人有权享受平等保护，以免受违反本宣言的任何歧视行为以及煽动这种歧视的任何行为之害。
@@ -40,7 +41,7 @@ def translate_text(text):
     ]
     
     response = client.chat.completions.create(
-        model="deepseek-chat",
+        model=os.getenv("TRANSLATION_MODEL"),
         messages=messages,
         response_format={'type': 'json_object'}
     )
@@ -91,4 +92,4 @@ def batch_process(input_dir, output_dir, num_threads=4):
 if __name__ == "__main__":
     input_dir = "./source"
     output_dir = "./output"
-    batch_process(input_dir, output_dir, num_threads=64)
+    batch_process(input_dir, output_dir, num_threads=int(os.getenv("TRANSLATE_THREADS")))

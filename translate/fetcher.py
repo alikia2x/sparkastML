@@ -60,7 +60,7 @@ def split_content(content):
     
     for sentence in sentences:
         sentence_length = len(sentence)
-        if (len(current_segment) >= 10 or current_length + sentence_length > 1500):
+        if (len(current_segment) >= 12 or current_length + sentence_length > 1800):
             segments.append(''.join(current_segment))
             current_segment = []
             current_length = 0
