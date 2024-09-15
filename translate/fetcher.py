@@ -48,6 +48,7 @@ def fetch_and_extract_content(url):
         return None
     
     content = trafilatura.extract(html_string, output_format="txt", url=url, favor_precision=True)
+    print(f"Successfully extracted text for URL: {url}")
     return content
 
 # 计算URL的MD5
@@ -95,6 +96,9 @@ def record_fetched_url(conn, url):
 
 # 处理单个URL的任务
 def process_url(url, db_path, save_path):
+    import time, random
+    cooldown_base = float(os.getenv("FETCH_COOLDOWN"))
+    time.sleep(random.random() * cooldown_base)
     conn = connect_db(db_path)
     content = fetch_and_extract_content(url)
     if content:
@@ -102,6 +106,7 @@ def process_url(url, db_path, save_path):
         save_segments(url, segments, save_path)
         record_fetched_url(conn, url)
     conn.close()
+    time.sleep(random.random() * cooldown_base)
 
 # 主函数
 def main():

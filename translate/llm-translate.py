@@ -43,7 +43,8 @@ def translate_text(text):
     response = client.chat.completions.create(
         model=os.getenv("TRANSLATION_MODEL"),
         messages=messages,
-        response_format={'type': 'json_object'}
+        response_format={'type': 'json_object'},
+        temperature=float(os.getenv("TRANSLATION_TEMP"))
     )
     
     return json.loads(response.choices[0].message.content)

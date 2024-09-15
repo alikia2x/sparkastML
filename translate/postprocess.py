@@ -33,11 +33,9 @@ def process_json_files(directory, converted_filename):
                         chinese_text = segment.get('chinese', '').replace('\n', ' ')
                         english_text = segment.get('english', '').replace('\n', ' ')
 
-                        if chinese_text not in bloom_filter_chinese:
+                        if chinese_text not in bloom_filter_chinese and english_text not in bloom_filter_english:
                             bloom_filter_chinese.add(chinese_text)
                             source_file.write(chinese_text + '\n')
-
-                        if english_text not in bloom_filter_english:
                             bloom_filter_english.add(english_text)
                             target_file.write(english_text + '\n')
 
