@@ -38,13 +38,15 @@ def get_unfetched_urls(conn, limit):
     return [row[0] for row in cursor.fetchall()]
 
 # 下载并提取网页内容
-def fetch_and_extract_content(url):
+def fetch_and_extract_content(conn, url):
     downloaded = trafilatura.fetch_url(url)
     if not downloaded:
         return None
     
     html_string = downloaded
-    if not is_probably_readerable(html_string):
+    if not is_probably_readerable(html_string) and os.getenv("FETCH_IGNORE_CHECK").capitalize() == "TRUE":
+        print(f"URL {url} is not readable.")
+        record_fetched_url(conn, url)
         return None
     
     content = trafilatura.extract(html_string, output_format="txt", url=url, favor_precision=True)
@@ -100,7 +102,7 @@ def process_url(url, db_path, save_path):
     cooldown_base = float(os.getenv("FETCH_COOLDOWN"))
     time.sleep(random.random() * cooldown_base)
     conn = connect_db(db_path)
-    content = fetch_and_extract_content(url)
+    content = fetch_and_extract_content(conn, url)
     if content:
         segments = split_content(content)
         save_segments(url, segments, save_path)

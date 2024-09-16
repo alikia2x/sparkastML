@@ -13,3 +13,5 @@ translate/output
 translate/source
 translate/result
 *.db
+dataset/raw
+translate/special-spiders
