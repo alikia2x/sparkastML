@@ -8,8 +8,11 @@ This dataset features high-quality, fresh synthetic data comprising over 100,000
 
 ### Details
 
+- **Source Language:** Chinese (Simplified)
+- **Target Language:** English
 - **Version:** 1
 - **Last Update:** 2024/09/16
+- **LICENSE:** [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/)
 
 ### Download Links
 
