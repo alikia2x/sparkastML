@@ -34,63 +34,79 @@ EXAMPLE JSON OUTPUT:
 }
 """
 
-def translate_text(text):
+
+def translate_text(text, client, model_name, temp):
     messages = [
         {"role": "system", "content": system_prompt},
-        {"role": "user", "content": text}
+        {"role": "user", "content": text},
     ]
-    
+
     response = client.chat.completions.create(
-        model=os.getenv("TRANSLATION_MODEL"),
+        model=model_name,
         messages=messages,
-        response_format={'type': 'json_object'},
-        temperature=float(os.getenv("TRANSLATION_TEMP"))
+        response_format={"type": "json_object"},
+        temperature=temp,
     )
-    
+
     return json.loads(response.choices[0].message.content)
+
 
 def process_file(input_file, output_dir):
     try:
-        with open(input_file, 'r', encoding='utf-8') as f:
+        with open(input_file, "r", encoding="utf-8") as f:
             text = f.read()
-        
-        translation = translate_text(text)
-        
+
+        model = os.getenv("TRANSLATION_MODEL")
+        temp = float(os.getenv("TRANSLATION_TEMP"))
+        translation = translate_text(text, client, model, temp)
+
         output_path = os.path.join(output_dir, Path(input_file).stem + ".json")
-        with open(output_path, 'w', encoding='utf-8') as f:
+        with open(output_path, "w", encoding="utf-8") as f:
             json.dump(translation, f, ensure_ascii=False, indent=4)
-        
+
         print(f"Successfully translated and saved to {output_path}")
-    
+
     except Exception as e:
         print(f"Error processing {input_file}: {e}")
+
 
 def batch_process(input_dir, output_dir, num_threads=4):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
-    
-    input_files = [f for f in os.listdir(input_dir) if os.path.isfile(os.path.join(input_dir, f))]
-    output_files = [f for f in os.listdir(output_dir) if os.path.isfile(os.path.join(output_dir, f))]
-    
+
+    input_files = [
+        f for f in os.listdir(input_dir) if os.path.isfile(os.path.join(input_dir, f))
+    ]
+    output_files = [
+        f for f in os.listdir(output_dir) if os.path.isfile(os.path.join(output_dir, f))
+    ]
+
     output_stems = {Path(f).stem for f in output_files}
-    
-    files = [os.path.join(input_dir, f) for f in input_files if Path(f).stem not in output_stems]
-    
+
+    files = [
+        os.path.join(input_dir, f)
+        for f in input_files
+        if Path(f).stem not in output_stems
+    ]
+
     threads = []
     for file in files:
         thread = threading.Thread(target=process_file, args=(file, output_dir))
         threads.append(thread)
         thread.start()
-        
+
         if len(threads) >= num_threads:
             for t in threads:
                 t.join()
             threads = []
-    
+
     for t in threads:
         t.join()
+
 
 if __name__ == "__main__":
     input_dir = "./source"
     output_dir = "./output"
-    batch_process(input_dir, output_dir, num_threads=int(os.getenv("TRANSLATE_THREADS")))
+    batch_process(
+        input_dir, output_dir, num_threads=int(os.getenv("TRANSLATE_THREADS"))
+    )

@@ -14,6 +14,16 @@ This model is optimized to be lightweight, ensuring it can run on a wide range o
 
 For a detailed explanation of how it works, you can refer to [this blog post](https://blog.alikia2x.com/en/posts/sparkastml-intention/).
 
+## Translation
+
+Language barriers are one of the biggest obstacles to communication between civilizations. In modern times, with the development of computer science and artificial intelligence, machine translation is bridging this barrier and building a Tower of Babel.
+
+Unfortunately, many machine translations are owned by commercial companies, which seriously hinders the development of freedom and innovation.
+
+Therefore, sparkastML is on the road to challenge commercial machine translation. We decided to tackle the translation between Chinese and English first. These are two languages ​​with a long history and a large number of users. Their writing methods and expression habits are very different, which brings challenges to the project.
+
+For more details, you can view [this page](./translate/README.md).
+
 ## Dataset
 
 To support the development of Libre Intelligence, we have made a series of datasets publicly available. You can access them [here](./dataset/public/README.md).
