@@ -6,6 +6,8 @@ sparkastML's first translation model is now available!
 
 ### Details
 
+- **Source Language:** Chinese (Simplified)
+- **Target Language:** English
 - **Training Time:** 5 hours, 20,000 steps
 - **Training Device:** RTX 3080 (20GB)
 - **Corpus Size:** Over 10 million sentences
@@ -13,7 +15,7 @@ sparkastML's first translation model is now available!
 
 ### Model Download
 
-- **Google Drive:** [Download from Google Drive](https://drive.google.com/file/d/1bJkkqQJLdwTgXFXVeP7fjPawfwelzeIB/view)
-- **IPFS:** [Download from IPFS](http://ipfs.a2x.pub/ipfs/QmNw3Mo3N31wwTQPXzNeGD8jPpkGp5VFQcC9gk44bfqW1u/)
-  - **CID:** `QmNw3Mo3N31wwTQPXzNeGD8jPpkGp5VFQcC9gk44bfqW1u`
+- **Google Drive:** [Download from Google Drive](https://drive.google.com/drive/folders/1-q_AKfQENW-pV6uAleUHPE9ghddfNWKF)
+- **IPFS:** [Download from IPFS](http://ipfs.a2x.pub/ipfs/QmUMadzkBwvH5KTpoxfv7TgqzaPpqBzkXtkecV9TXPfZ3F/)
+  - **CID:** `QmUMadzkBwvH5KTpoxfv7TgqzaPpqBzkXtkecV9TXPfZ3F`
 - **GitHub Release:** [Go to Release Page](https://github.com/alikia2x/sparkastML/releases/tag/v2-model)
