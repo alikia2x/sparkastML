@@ -14,7 +14,9 @@ This dataset features high-quality, fresh synthetic data comprising over 100,000
 - **Last Update:** 2024/09/16
 - **LICENSE:** [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/)
 
-### Download Links
+### Download
 
-- **Google Drive:** [Download from Google Drive](https://drive.google.com/drive/folders/1_ADblZcB5p9BUvawkYDmp1qIUDZgkkoe?usp=sharing)
+- **Google Drive:** [Download from Google Drive](https://drive.google.com/drive/folders/1_ADblZcB5p9BUvawkYDmp1qIUDZgkkoe)
 - **IPFS:** [Download from IPFS](https://ipfs.a2x.pub/ipfs/QmYz4ew4nSzPc6TZvoWk6jXpGN82qt3J46nwfb75N2YKc4/)
+  - CID: `QmYz4ew4nSzPc6TZvoWk6jXpGN82qt3J46nwfb75N2YKc4`
+- **GitHub Release:** [Go to Release Page](https://github.com/alikia2x/sparkastML/releases/tag/v1-dataset)
