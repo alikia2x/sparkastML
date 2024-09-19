@@ -28,7 +28,7 @@ def main(input_file, sample_size):
         chinese_text = item["chinese"]
         english_text = item["english"]
 
-        with open("src.txt", 'a') as srcf, open("ref.txt", 'a') as reff:
+        with open("./data/src.txt", 'a') as srcf, open("./data/ref.txt", 'a') as reff:
             srcf.write(chinese_text + '\n')
             reff.write(english_text + '\n')
 
