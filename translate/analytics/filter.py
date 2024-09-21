@@ -24,6 +24,7 @@ cos_sim = lambda a, b: (a @ b.T) / (norm(a) * norm(b))
 # Load the model and tokenizer
 model_name = 'jinaai/jina-embeddings-v2-base-zh'
 model = AutoModel.from_pretrained(model_name, trust_remote_code=True)
+model.to('cuda')
 
 # Define file paths from command-line arguments
 file_a_path = args.file_a
