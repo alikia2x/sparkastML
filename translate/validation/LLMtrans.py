@@ -2,6 +2,7 @@ from openai import OpenAI
 import argparse
 import os
 from dotenv import load_dotenv
+from tqdm import tqdm
 
 def translate_text(text, client, model_name, temp):
     messages = [
@@ -37,7 +38,7 @@ with open(input_file, "r") as f:
     src_lines = f.readlines()
 
 
-for line in src_lines:
+for line in tqdm(src_lines):
     result = translate_text(line, client, model, temp)
     with open(output_file, 'a') as f:
         f.write(result + '\n')

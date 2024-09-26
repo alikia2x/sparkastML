@@ -88,7 +88,7 @@ def main():
 
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     data = load_data("data.json")
-    class_to_idx, _ = create_class_mappings(data)
+    class_to_idx, idx_to_class = create_class_mappings(data)
     embedding_map = torch.load("token_id_to_reduced_embedding.pt")
     dataset = preprocess_data(data, embedding_map, tokenizer, class_to_idx)
     train_data, _ = train_test_split(dataset, test_size=0.2)
@@ -143,6 +143,12 @@ def main():
         },
         opset_version=11,
     )
+    meta = {
+        "idx_to_class": idx_to_class,
+        "threshold": 0
+    }
+    with open('NLU_meta.json', 'w') as f:
+        json.dump(meta, f)
 
 
 if __name__ == "__main__":
