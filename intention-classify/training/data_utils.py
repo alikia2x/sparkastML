@@ -31,6 +31,13 @@ def preprocess_data(data, embedding_map, tokenizer, class_to_idx, max_length=64)
             dataset.append((class_to_idx[label], embeddings))
     return dataset
 
+def get_sentences(data):
+    result = []
+    for _, sentences in data.items():
+        for sentence in sentences:
+            result.append(sentence)
+    return result
+
 
 class TextDataset(Dataset):
     def __init__(self, data):

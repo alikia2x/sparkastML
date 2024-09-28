@@ -32,18 +32,21 @@ class SelfAttention(nn.Module):
 
 
 class AttentionBasedModel(nn.Module):
-    def __init__(self, input_dim, num_classes, heads=8, dim_feedforward=512):
+    def __init__(self, input_dim, num_classes, heads=8, dim_feedforward=512, num_layers=3):
         super(AttentionBasedModel, self).__init__()
-        self.self_attention = SelfAttention(input_dim, heads)
+        self.self_attention_layers = nn.ModuleList([
+            SelfAttention(input_dim, heads) for _ in range(num_layers)
+        ])
         self.fc1 = nn.Linear(input_dim, dim_feedforward)
         self.fc2 = nn.Linear(dim_feedforward, num_classes)
         self.dropout = nn.Dropout(0.5)
         self.norm = nn.LayerNorm(input_dim)
 
     def forward(self, x):
-        attn_output = self.self_attention(x)
-        attn_output = self.norm(attn_output + x)
-        pooled_output = torch.mean(attn_output, dim=1)
+        for attn_layer in self.self_attention_layers:
+            attn_output = attn_layer(x)
+            x = self.norm(attn_output + x)
+        pooled_output = torch.mean(x, dim=1)
         x = F.relu(self.fc1(pooled_output))
         x = self.dropout(x)
         x = self.fc2(x)
