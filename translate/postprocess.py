@@ -27,8 +27,8 @@ def process_json_files(directory, converted_filename):
                 data = json.load(json_file)
                 segments = data.get('segments', [])
 
-                with open('./result/source.txt', 'a', encoding='utf-8') as source_file, \
-                     open('./result/target.txt', 'a', encoding='utf-8') as target_file:
+                with open('./result/source-new.txt', 'a', encoding='utf-8') as source_file, \
+                     open('./result/target-new.txt', 'a', encoding='utf-8') as target_file:
                     for segment in segments:
                         chinese_text = segment.get('chinese', '').replace('\n', ' ')
                         english_text = segment.get('english', '').replace('\n', ' ')
@@ -42,7 +42,7 @@ def process_json_files(directory, converted_filename):
             write_converted_file(converted_filename, filename)
 
 if __name__ == "__main__":
-    json_directory = './output'  # 替换为你的JSON文件目录路径
+    json_directory = './output-new'  # 替换为你的JSON文件目录路径
     converted_filename = './result/converted.txt'
 
     process_json_files(json_directory, converted_filename)

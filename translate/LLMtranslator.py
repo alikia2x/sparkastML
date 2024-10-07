@@ -105,8 +105,8 @@ def batch_process(input_dir, output_dir, num_threads=4):
 
 
 if __name__ == "__main__":
-    input_dir = "./source"
-    output_dir = "./output"
+    input_dir = "./source-new"
+    output_dir = "./output-new"
     batch_process(
         input_dir, output_dir, num_threads=int(os.getenv("TRANSLATE_THREADS"))
     )

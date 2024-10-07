@@ -9,8 +9,8 @@ token_to_id.json
 __pycache__
 .env
 .env*
-translate/output
-translate/source
+translate/output*
+translate/source*
 translate/result
 *.db
 dataset/raw
