@@ -15,3 +15,5 @@ translate/result
 *.db
 dataset/raw
 translate/special-spiders
+ugNMT/BPE/output*
+ugNMT/BPE/codes
