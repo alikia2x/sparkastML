@@ -17,3 +17,4 @@ dataset/raw
 translate/special-spiders
 ugNMT/BPE/output*
 ugNMT/BPE/codes
+forced-alignment/segments
