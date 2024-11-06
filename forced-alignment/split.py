@@ -58,6 +58,24 @@ def timestamp(seconds):
 
     return f"{hours:02}:{minutes:02}:{seconds:02}.{milliseconds:03}"
 
+def timestamp_inverse(ttml_timestamp):
+    """
+    将TTML的时间戳格式字符串（HH:MM:SS.sss）转换为浮点数的秒钟。
+
+    :param ttml_timestamp: TTML时间戳格式字符串
+    :return: 浮点数的秒钟
+    """
+    parts = ttml_timestamp.split(':')
+    hours = int(parts[0])
+    minutes = int(parts[1])
+    seconds_and_milliseconds = parts[2].split('.')
+    seconds = int(seconds_and_milliseconds[0])
+    milliseconds = int(seconds_and_milliseconds[1])
+
+    total_seconds = hours * 3600 + minutes * 60 + seconds + milliseconds / 1000
+
+    return total_seconds
+
 import xml.etree.ElementTree as ET
 
 import os
@@ -113,13 +131,13 @@ class TTMLGenerator:
         tree = ET.ElementTree(self.tt)
         tree.write(filename, encoding="utf-8", xml_declaration=True)
 
-duration = get_audio_duration("霜雪千年_vocal.mp3")
+duration = get_audio_duration("./data/谷雨.mp3")
 
 # 示例使用
 ttml_generator = TTMLGenerator(duration=timestamp(duration))
 
 
-def process_line(line_idx, start_time):
+def process_line(line_idx, start_time, total_lines):
     with open(f"./segments/line-{line_idx}.txt", "r") as f:
         text = f.read()
         
@@ -153,6 +171,12 @@ def process_line(line_idx, start_time):
             break
         item["end"] = words[idx + 1]["start"]
         idx+=1
+    if line_idx == total_lines:
+        words = words[1:]
+    elif line_idx == 1:
+        words = words[:-1]
+    else:
+        words = words[1:-1]
     result = []
     for word in words:
         result.append((word["word"], timestamp(word["start"]), timestamp(word["end"])))
@@ -161,19 +185,53 @@ def process_line(line_idx, start_time):
 
 lines_to_process = sorted(extract_numbers_from_files("segments"))
 
-i=1
+def parse_lrc(lrc_file, audio_len):
+    """解析LRC文件，返回一个包含时间戳和歌词的列表"""
+    with open(lrc_file, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+    
+    lrc_data = []
+    for line in lines:
+        # 使用正则表达式匹配时间戳和歌词
+        match = re.match(r'\[(\d+):(\d+\.\d+)\](.*)', line)
+        if match:
+            minutes = int(match.group(1))
+            seconds = float(match.group(2))
+            lyric = match.group(3).strip()
+            lyric = lyric.replace(" ", "")
+            timestamp = minutes * 60 + seconds
+            lrc_data.append((lyric, timestamp))
+    
+    for i, (lyric, start_time) in enumerate(lrc_data):
+        # Skip empty line
+        if lyric.strip() == "":
+            continue
+        if i < len(lrc_data) - 1:
+            end_time = lrc_data[i + 1][1]
+        else:
+            end_time = audio_len
+        lrc_data[i] = (lyric, start_time, end_time)
+    
+    # Filter empty lines again
+    lrc_data = [line for line in lrc_data if line[0].strip() != ""]
+
+    return lrc_data
+
+lrc_data = parse_lrc("./data/谷雨_raw.lrc", duration)
+
+i=0
 for line_num in tqdm(lines_to_process):
-    with open(f"./segments/line-{line_num}.time", "r") as f:
-        a = f.read()
-        b = a.split(",")
-        start_time = float(b[0])
-        end_time = float(b[1])
-    result = process_line(line_num, start_time)
+    start_time = lrc_data[i][1]
+    result = process_line(line_num, start_time, len(lines_to_process))
+    end_time = lrc_data[i][2]
+    if timestamp_inverse(result[-1][2]) > end_time:
+        end_time = timestamp_inverse(result[-1][2])
     ttml_generator.add_lyrics(
-        begin=timestamp(start_time), end=timestamp(end_time), agent="v1", itunes_key=f"L{i}",
+        begin=timestamp(start_time), end=timestamp(end_time), agent="v1", itunes_key=f"L{i+1}",
         words=result
     )
     i+=1
+    ttml_generator.save("output.ttml")
 
 # 保存文件
 ttml_generator.save("output.ttml")

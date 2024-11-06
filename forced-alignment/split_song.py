@@ -49,8 +49,8 @@ def split_audio_by_lrc(audio_file, lrc_data, output_prefix):
         print(f"Saved {output_file}")
 
 if __name__ == "__main__":
-    lrc_file = "霜雪千年.lrc"  # LRC文件路径
-    audio_file = "霜雪千年.mp3"  # 音频文件路径
+    lrc_file = "./data/谷雨.lrc"  # LRC文件路径
+    audio_file = "./data/谷雨.mp3"  # 音频文件路径
     output_prefix = "segments/line"  # 输出文件名的前缀
     
     lrc_data = parse_lrc(lrc_file)

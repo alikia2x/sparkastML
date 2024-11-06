@@ -18,3 +18,5 @@ translate/special-spiders
 ugNMT/BPE/output*
 ugNMT/BPE/codes
 forced-alignment/segments
+forced-alignment/data
+forced-alignment/output.ttml
