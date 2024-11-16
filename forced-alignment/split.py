@@ -171,12 +171,6 @@ def process_line(line_idx, start_time, total_lines):
             break
         item["end"] = words[idx + 1]["start"]
         idx+=1
-    if line_idx == total_lines:
-        words = words[1:]
-    elif line_idx == 1:
-        words = words[:-1]
-    else:
-        words = words[1:-1]
     result = []
     for word in words:
         result.append((word["word"], timestamp(word["start"]), timestamp(word["end"])))
@@ -217,21 +211,18 @@ def parse_lrc(lrc_file, audio_len):
 
     return lrc_data
 
-lrc_data = parse_lrc("./data/谷雨_raw.lrc", duration)
+lrc_data = parse_lrc("./data/谷雨.lrc", duration)
 
 i=0
 for line_num in tqdm(lines_to_process):
     start_time = lrc_data[i][1]
-    result = process_line(line_num, start_time, len(lines_to_process))
     end_time = lrc_data[i][2]
-    if timestamp_inverse(result[-1][2]) > end_time:
-        end_time = timestamp_inverse(result[-1][2])
+    result = process_line(line_num, start_time, len(lines_to_process))
     ttml_generator.add_lyrics(
         begin=timestamp(start_time), end=timestamp(end_time), agent="v1", itunes_key=f"L{i+1}",
         words=result
     )
     i+=1
-    ttml_generator.save("output.ttml")
 
 # 保存文件
 ttml_generator.save("output.ttml")
